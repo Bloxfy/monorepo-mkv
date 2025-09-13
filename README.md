@@ -19,24 +19,32 @@ monorepo-nestjs-nuxt/
 │ ├─ ui/ # Biblioteca de componentes Vue compartilhados
 │ ├─ types/ # Tipos/DTOs usados entre frontend e backend
 │ └─ utils/ # Funções utilitárias
-├─ .github/ # Workflows CI/CD
+├─ scripts/       # Scripts utilitários (e.g. clean.js)
 ├─ package.json # Scripts globais
 ├─ turbo.json # Configuração Turborepo
 └─ tsconfig.json # Config base TS
 ```
 
 ## 📦 Scripts principais
-- `pnpm dev` – roda frontend + backend em paralelo
-- `pnpm dev:backend` – roda somente o backend
-- `pnpm dev:frontend` – roda somente o frontend
-- `pnpm build` – build de todos os apps/pacotes
+```bash
+pnpm dev     # turbo run dev - inicia todos os apps em modo desenvolvimento
+pnpm build   # turbo run build - compila apps e pacotes
+pnpm lint    # turbo run lint - verifica estilo de código
+pnpm test    # turbo run test - executa testes
+pnpm clean   # node scripts/clean.js - limpa artefatos de build
+```
+## Instalação
 
-## 🔄 CI/CD
-O repositório utiliza **GitHub Actions** para:
-- Instalação de dependências com cache
-- Lint e testes
-- Build incremental via Turborepo
-- Deploy automatizado (opcional)
+No diretório raiz, execute:
 
-## 📜 Licença
-MIT
+```bash
+pnpm install
+```
+
+## Contribuição
+
+Contribuições são bem-vindas! Abra uma issue ou envie um pull request para melhorias e correções.
+
+## Licença
+
+Este projeto ainda não possui licença definida. Adicione um arquivo `LICENSE` conforme necessário. 
