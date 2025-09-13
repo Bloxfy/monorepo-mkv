@@ -1,0 +1,22 @@
+{
+  "name": "monorepo-nestjs-nuxt",
+  "version": "0.0.1",
+  "description": "Monorepo for NestJS and Nuxt",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo run format",
+    "format:fix": "turbo run format:fix",
+    "test": "turbo run test",
+    "clean": "node scripts/clean.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "turbo": "^2.5.6"
+  }
+}
