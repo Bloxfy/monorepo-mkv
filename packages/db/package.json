@@ -1,0 +1,27 @@
+{
+  "name": "@packages/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && prisma generate",
+    "push": "prisma db push",
+    "studio": "prisma studio",
+    "generate": "prisma generate",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "@prisma/client": "^6.16.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.3",
+    "prisma": "^6.16.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
