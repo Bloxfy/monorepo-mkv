@@ -5,6 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
     "build": "prisma generate && tsc",
     "push": "prisma db push",
     "studio": "prisma studio",
@@ -19,8 +22,12 @@
     "@prisma/client": "^6.16.1"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.18.3",
+    "jest": "^30.1.3",
+    "mongodb-memory-server": "^10.2.0",
     "prisma": "^6.16.1",
+    "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
