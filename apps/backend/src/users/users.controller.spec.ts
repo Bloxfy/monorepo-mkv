@@ -33,7 +33,7 @@ describe('UsersController', () => {
   });
 
   it('should call createUser with DTO', async () => {
-    const dto = { email: 'a@a.com', password: '123', name: 'Test' };
+    const dto = { email: 'a@a.com', password: '123', name: 'Test', lastName: 'Test' };
     await controller.createUser(dto);
     expect(userServiceMock.createUser).toHaveBeenCalledWith(dto);
   });

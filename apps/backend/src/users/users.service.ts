@@ -1,3 +1,4 @@
+import { AuthService } from '../auth/auth.service';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
@@ -7,13 +8,16 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-    constructor(private readonly prismaService: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly authService: AuthService
+    ) { }
     async getMe(user: any) {
         return user;
     }
 
     async createUser(user: CreateUserDto) {
-        const existing = await this.prismaService.prisma.user.findUnique({
+        const existing = await this.prisma.user.findUnique({
             where: { email: user.email }
         });
 
@@ -23,23 +27,18 @@ export class UsersService {
 
         const hashedPassword = await bcrypt.hash(user.password, 10);
 
-        const newUser = await this.prismaService.prisma.user.create({
+        const newUser = await this.prisma.user.create({
             data: {
                 ...user,
                 password: hashedPassword
             }
         });
-        return newUser;
+        const accessToken = await this.authService.login(newUser);
+        return { ...newUser, ...accessToken };
     }
 
     async getUser(userId: string) {
-        const user = await this.privateGetUser(userId);
-
-        return {
-            id: user.id,
-            name: user.name,
-            email: user.email
-        };
+        return await this.privateGetUser(userId);
     }
 
     async updateUser(userId: string, user: UpdateUserDto) {
@@ -49,7 +48,7 @@ export class UsersService {
             throw new BadRequestException('No fields to update');
         }
 
-        return this.prismaService.prisma.user.update({
+        return this.prisma.user.update({
             where: { id: userId },
             data: user
         });
@@ -58,7 +57,7 @@ export class UsersService {
     async deleteUser(userId: string) {
         await this.privateGetUser(userId);
 
-        return this.prismaService.prisma.user.update({
+        return this.prisma.user.update({
             where: { id: userId },
             data: {
                 deletedAt: new Date()
@@ -67,7 +66,7 @@ export class UsersService {
     }
 
     private async privateGetUser(userId: string): Promise<User> {
-        const user = await this.prismaService.prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: { id: userId }
         });
 

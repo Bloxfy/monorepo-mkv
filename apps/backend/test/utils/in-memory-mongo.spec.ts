@@ -1,4 +1,4 @@
-import { startInMemoryMongo, clearDatabase, stopInMemoryMongo, prisma as client, prisma, mongoServer } from './test-utils';
+import { startInMemoryMongo, clearDatabase, stopInMemoryMongo, prisma as client, prisma, mongoServer } from './in-memory-mongo';
 
 describe('test-utils', () => {
 

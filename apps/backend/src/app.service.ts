@@ -3,9 +3,9 @@ import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class AppService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
   async getHello(): Promise<{ message: string; user: any }> {
-    const user = await this.prismaService.prisma.user.findMany();
+    const user = await this.prisma.user.findMany();
     return { message: 'Hello World!', user };
   }
 }

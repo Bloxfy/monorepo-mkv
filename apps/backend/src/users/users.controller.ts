@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Public } from 'src/auth/public.decorator';
+import { Public } from '../auth/public.decorator';
+import { UserResponseDto } from './dto/user-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('users')
 export class UsersController {
@@ -10,27 +12,30 @@ export class UsersController {
 
     @Get('me')
     async getMe(@Req() req: any) {
-        return this.usersService.getMe(req.user as any);
+        return plainToInstance(UserResponseDto, await this.usersService.getMe(req.user as any));
     }
 
     @Public()
     @Post('signup')
+    @HttpCode(201)
     async createUser(@Body() createUserDto: CreateUserDto) {
-        return this.usersService.createUser(createUserDto);
+        return plainToInstance(UserResponseDto, await this.usersService.createUser(createUserDto), { excludeExtraneousValues: true });
     }
 
-    @Get(':id')
-    async getUser(@Param('id') id: string) {
-        return this.usersService.getUser(id);
+    @Get()
+    async getUser(@Req() req: any) {
+        return plainToInstance(UserResponseDto, await this.usersService.getUser(req.user.id), { excludeExtraneousValues: true });
     }
 
-    @Put(':id')
-    async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.usersService.updateUser(id, updateUserDto);
+    @Put()
+    async updateUser(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
+        return plainToInstance(UserResponseDto, await this.usersService.updateUser(req.user.id, updateUserDto), { excludeExtraneousValues: true });
     }
 
-    @Delete(':id')
-    async deleteUser(@Param('id') id: string) {
-        return this.usersService.deleteUser(id);
+    @Delete()
+    @HttpCode(204)
+    async deleteUser(@Req() req: any) {
+        await this.usersService.deleteUser(req.user.id);
+        return;
     }
 }
