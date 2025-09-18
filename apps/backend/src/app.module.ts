@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
+import { WalletsModule } from './wallets/wallets.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './auth/jwt.guard';
 
@@ -15,6 +16,7 @@ import { JwtGuard } from './auth/jwt.guard';
     }),
     AuthModule,
     UsersModule,
+    WalletsModule,
     PrismaModule
   ],
   controllers: [AppController],
