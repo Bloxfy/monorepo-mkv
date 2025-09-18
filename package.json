@@ -10,7 +10,9 @@
     "format": "turbo run format",
     "format:fix": "turbo run format:fix",
     "test": "turbo run test",
-    "clean": "node scripts/clean.js"
+    "clean": "node scripts/clean.js",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push"
   },
   "keywords": [],
   "author": "",
