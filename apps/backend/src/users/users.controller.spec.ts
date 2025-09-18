@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthService } from '../auth/auth.service';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -17,10 +17,14 @@ describe('UsersController', () => {
     };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, {
-        provide: PrismaService,
+      providers: [{
+        provide: UsersService,
         useValue: userServiceMock,
-      }],
+      },
+      {
+        provide: AuthService,
+        useValue: { validateUser: jest.fn() },
+      },],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
@@ -39,18 +43,18 @@ describe('UsersController', () => {
   });
 
   it('should call getUser with id', async () => {
-    await controller.getUser('1');
+    await controller.getUser({ user: { id: '1' } });
     expect(userServiceMock.getUser).toHaveBeenCalledWith('1');
   });
 
   it('should call updateUser with id and DTO', async () => {
-    const dto = { name: 'Updated' };
-    await controller.updateUser('1', dto);
+    const dto = { name: 'Updated', lastName: 'Updated' };
+    await controller.updateUser({ user: { id: '1' } }, dto);
     expect(userServiceMock.updateUser).toHaveBeenCalledWith('1', dto);
   });
 
   it('should call deleteUser with id', async () => {
-    await controller.deleteUser('1');
+    await controller.deleteUser({ user: { id: '1' } });
     expect(userServiceMock.deleteUser).toHaveBeenCalledWith('1');
   });
 });

@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/public.decorator';
 import { UserResponseDto } from './dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
+import { LoginUserDto } from './dto/login-user.dto copy';
 
 @Controller('users')
 export class UsersController {
@@ -21,6 +22,14 @@ export class UsersController {
     async createUser(@Body() createUserDto: CreateUserDto) {
         return plainToInstance(UserResponseDto, await this.usersService.createUser(createUserDto), { excludeExtraneousValues: true });
     }
+
+    @Public()
+    @Post('login')
+    @HttpCode(200)
+    async login(@Body() loginDto: LoginUserDto) {
+        return plainToInstance(UserResponseDto, await this.usersService.login(loginDto), { excludeExtraneousValues: true });
+    }
+
 
     @Get()
     async getUser(@Req() req: any) {

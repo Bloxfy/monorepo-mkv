@@ -1,10 +1,11 @@
 import { AuthService } from '../auth/auth.service';
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
+import { LoginUserDto } from './dto/login-user.dto copy';
 
 @Injectable()
 export class UsersService {
@@ -33,8 +34,27 @@ export class UsersService {
                 password: hashedPassword
             }
         });
-        const accessToken = await this.authService.login(newUser);
+        const accessToken = await this.authService.getAccessToken({id: newUser.id, email: newUser.email});
         return { ...newUser, ...accessToken };
+    }
+
+    async login(loginUserDto: LoginUserDto) {
+        const user = await this.prisma.user.findUnique({
+            where: { email: loginUserDto.username }
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        const isPasswordValid = await bcrypt.compare(loginUserDto.password, user.password);
+
+        if (!isPasswordValid) {
+            throw new UnauthorizedException('Invalid password or username');
+        }
+
+        const accessToken = await this.authService.getAccessToken({id: user.id, email: user.email});
+        return { ...user, ...accessToken };
     }
 
     async getUser(userId: string) {
