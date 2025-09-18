@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -7,14 +7,20 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
     
-    async login(user: any) {
-        const payload = { sub: user.id, email: user.email };
+    async getAccessToken({id, email}: {id: string, email: string}) {
+        const payload = { sub: id, email: email };
         return {
             accessToken: this.jwtService.sign(payload),
         };
     }
 
     async verify(token: string): Promise<any> {
-        return this.jwtService.verify(token);
+        await this.jwtService.verify(token);
+
+        const decoded = await this.jwtService.decode(token);
+        if (!decoded) {
+            throw new UnauthorizedException('Invalid token');
+        }
+        return decoded;
     }
 }

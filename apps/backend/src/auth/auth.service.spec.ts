@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './jwt.strategy';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
@@ -12,8 +11,13 @@ describe('AuthService', () => {
       { 
         sub: 'mocked-user-id', 
         username: 'mocked-username'
-      }
-    ),
+      }),
+      decode: jest.fn().mockReturnValue(
+        { 
+          sub: 'mocked-user-id', 
+          username: 'mocked-username'
+        }
+      )
   };
 
   beforeEach(async () => {
@@ -30,9 +34,9 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return a JWT token if login is successful', async () => {
-    const result = await service.login({ id: 'mocked-user-id', username: 'mocked-username' });
-    expect(result).toHaveProperty('access_token');
+  it('should return a JWT token if getAccessToken is successful', async () => {
+    const result = await service.getAccessToken({ id: 'mocked-user-id', email: 'mocked-username' });
+    expect(result).toHaveProperty('accessToken');
   });
 
   it('should verify a JWT token', async () => {
