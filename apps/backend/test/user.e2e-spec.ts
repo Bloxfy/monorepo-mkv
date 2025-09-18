@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { startInMemoryMongo, stopInMemoryMongo, clearDatabase, prisma } from './utils/in-memory-mongo';
+import { startInMemoryMongo } from './utils/in-memory-mongo';
 import { PrismaClient } from '@prisma/client';
 import { PrismaService } from '../src/prisma/prisma.service';
 
