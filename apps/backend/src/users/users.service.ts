@@ -44,7 +44,7 @@ export class UsersService {
         });
 
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new UnauthorizedException('Invalid password or username');
         }
 
         const isPasswordValid = await bcrypt.compare(loginUserDto.password, user.password);
