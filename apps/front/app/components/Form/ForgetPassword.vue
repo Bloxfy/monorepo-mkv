@@ -2,10 +2,10 @@
     <form :class="cn('flex flex-col gap-6')" @submit.prevent="onSubmit">
         <div class="flex flex-col items-center gap-2 text-center">
             <h1 class="text-2xl font-bold">
-                Login to your account
+                Forgot your password?
             </h1>
             <p class="text-balance text-sm text-muted-foreground">
-                Enter your email below to login to your account
+                Enter your email below to send a link to reset your password
             </p>
         </div>
         <div class="grid gap-6">
@@ -13,23 +13,8 @@
                 <FormItem class="grid gap-2">
                     <FormLabel for="email">Email</FormLabel>
                     <FormControl>
-                        <Input id="email" type="email" placeholder="m@example.com" v-bind="componentField"
-                            :disabled="isLoading" />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
-            <FormField v-slot="{ componentField }" name="password" :validate-on-blur="!isFieldDirty">
-                <FormItem class="grid gap-2">
-                    <div class="flex items-center">
-                        <FormLabel for="password">Password</FormLabel>
-                        <NuxtLink to="/forgot-password"
-                            class="ml-auto text-sm underline-offset-4 hover:underline">
-                            Forgot your password?
-                        </NuxtLink>
-                    </div>
-                    <FormControl>
-                        <Input id="password" type="password" v-bind="componentField" :disabled="isLoading" />
+                        <Input :disabled="isLoading" id="email" type="email" placeholder="m@example.com"
+                            v-bind="componentField" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -39,7 +24,7 @@
                     <LoaderCircle class="w-4 h-4 animate-spin" />
                 </template>
                 <template v-else>
-                    Login
+                    Send
                 </template>
             </Button>
         </div>
@@ -64,7 +49,6 @@ defineProps<{
 
 const formSchema = z.object({
     email: z.email(),
-    password: z.string().min(6)
 })
 
 const formTypedSchema = toTypedSchema(formSchema)
@@ -76,14 +60,11 @@ const { handleSubmit, isFieldDirty, setErrors } = useForm({
 const emit = defineEmits<{
     (e: 'submit', values: {
         email: string
-        password: string
     }): void
 }>()
 
 defineExpose({ setErrors })
 
-const onSubmit = handleSubmit((values) => {
-    emit('submit', values)
-})
+const onSubmit = handleSubmit((values) => emit('submit', values))
 
 </script>

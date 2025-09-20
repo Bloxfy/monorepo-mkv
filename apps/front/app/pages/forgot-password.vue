@@ -12,7 +12,7 @@
             </div>
             <div class="flex flex-1 items-center justify-center">
                 <div class="w-full max-w-xs">
-                    <FormLogin ref="loginRef" @submit="handleSubmit" :is-loading="isLoading" />
+                    <FormForgetPassword ref="loginRef" @submit="handleSubmit" :is-loading="isLoading" />
                 </div>
             </div>
         </div>
@@ -25,32 +25,24 @@
 <script setup lang="ts">
 import FormLogin from '~/components/Form/Login.vue'
 
-const loginRef = ref<InstanceType<typeof FormLogin>>()
 const isLoading = ref(false)
 
-const handleSubmit = async (values: { email: string, password: string }) => {
+const loginRef = ref<InstanceType<typeof FormLogin>>()
+
+const handleSubmit = async (values: { email: string }) => {
     isLoading.value = true
-    await $fetch<{ accessToken: string }>('http://localhost:3001/users/login', {
+    await $fetch('http://localhost:3001/users/forgot-password', {
         method: 'POST',
         body: {
             username: values.email,
-            password: values.password
         },
         credentials: 'include'
     }).then((res) => {
-        if (res.accessToken) {
-            useCookie('token').value = res.accessToken
-            navigateTo('/dashboard')
-        }
+        console.log(res)
     }).catch((err) => {
         console.log(err)
-        if (loginRef.value && err.statusCode === 401) {
-            loginRef.value.setErrors({
-                email: err.data.message,
-                password: err.data.message
-            })
-        }
     })
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     isLoading.value = false
 }
 </script>

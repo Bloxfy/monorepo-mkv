@@ -7,11 +7,12 @@
                 </div>
                 Mockey Invest
             </a>
-            <Switch :model-value="isDark" @update:model-value="toggleTheme" />
+            <ThemeSwitch />
         </div>
         <div class="flex flex-grow items-center justify-center">
             <div class="w-full max-w-xs">
-                <FormSignUp ref="signUpRef" @onSubmit="handleSubmit" :error-validate="errorValidate" />
+                <FormSignUp ref="signUpRef" @onSubmit="handleSubmit" :error-validate="errorValidate"
+                    :is-loading="isLoading" />
             </div>
         </div>
     </div>
@@ -20,24 +21,22 @@
 import FormSignUp from '~/components/Form/SignUp.vue'
 
 const signUpRef = ref<InstanceType<typeof FormSignUp>>()
-const isDark = ref(false)
-const toggleTheme = () => {
-    isDark.value = !isDark.value
-    document.documentElement.classList.toggle('dark', isDark.value)
-}
+const isLoading = ref(false)
+
 const errorValidate = ref({
     email: {
         message: ''
     }
 })
 
-const handleSubmit = (values: {
+const handleSubmit = async (values: {
     email: string
     password: string
     name: string
     lastName: string
 }) => {
-    $fetch('http://localhost:3001/users/signup', {
+    isLoading.value = true
+    await $fetch('http://localhost:3001/users/signup', {
         method: 'POST',
         body: {
             email: values.email,
@@ -53,5 +52,6 @@ const handleSubmit = (values: {
             signUpRef.value?.setErrors({ email: 'Email already exists' })
         }
     })
+    isLoading.value = false
 }
 </script>

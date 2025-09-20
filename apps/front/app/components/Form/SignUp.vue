@@ -14,7 +14,8 @@
                     <FormItem class="grid gap-2">
                         <FormLabel for="name">Name</FormLabel>
                         <FormControl>
-                            <Input id="name" type="text" placeholder="John Doe" v-bind="componentField" />
+                            <Input :disabled="isLoading" id="name" type="text" placeholder="John Doe"
+                                v-bind="componentField" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -23,7 +24,8 @@
                     <FormItem class="grid gap-2">
                         <FormLabel for="lastName">Last Name</FormLabel>
                         <FormControl>
-                            <Input id="lastName" type="text" placeholder="John Doe" v-bind="componentField" />
+                            <Input :disabled="isLoading" id="lastName" type="text" placeholder="John Doe"
+                                v-bind="componentField" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -33,7 +35,8 @@
                 <FormItem class="grid gap-2">
                     <FormLabel for="email">Email</FormLabel>
                     <FormControl>
-                        <Input id="email" type="email" placeholder="m@example.com" v-bind="componentField" />
+                        <Input :disabled="isLoading" id="email" type="email" placeholder="m@example.com"
+                            v-bind="componentField" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -42,13 +45,18 @@
                 <FormItem class="grid gap-2">
                     <FormLabel for="password">Password</FormLabel>
                     <FormControl>
-                        <Input id="password" type="password" v-bind="componentField" />
+                        <Input :disabled="isLoading" id="password" type="password" v-bind="componentField" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
             </FormField>
-            <Button type="submit" class="w-full">
-                Sign Up
+            <Button type="submit" class="w-full" :disabled="isLoading">
+                <template v-if="isLoading">
+                    <LoaderCircle class="w-4 h-4 animate-spin" />
+                </template>
+                <template v-else>
+                    Sign Up
+                </template>
             </Button>
         </div>
         <div class="text-center text-sm">
@@ -64,6 +72,11 @@ import { cn } from '~/lib/utils'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import { z } from 'zod'
+import { LoaderCircle } from 'lucide-vue-next'
+
+defineProps<{
+    isLoading: boolean
+}>()
 
 const formSchema = z.object({
     email: z.email(),
