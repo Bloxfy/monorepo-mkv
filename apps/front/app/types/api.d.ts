@@ -27,6 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Get token information */
         get: operations["UsersController_getMe"];
         put?: never;
         post?: never;
@@ -45,6 +46,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** Create a new user */
         post: operations["UsersController_createUser"];
         delete?: never;
         options?: never;
@@ -61,6 +63,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** Get auth token */
         post: operations["UsersController_login"];
         delete?: never;
         options?: never;
@@ -75,13 +78,16 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** Information about user */
         get: operations["UsersController_getUser"];
-        put: operations["UsersController_updateUser"];
+        put?: never;
         post?: never;
+        /** Deleted a new user */
         delete: operations["UsersController_deleteUser"];
         options?: never;
         head?: never;
-        patch?: never;
+        /** Update user */
+        patch: operations["UsersController_updateUser"];
         trace?: never;
     };
     "/wallets": {
@@ -96,6 +102,7 @@ export interface paths {
         put?: never;
         /** Create a new wallet */
         post: operations["WalletsController_createWallet"];
+        /** Delete wallet */
         delete: operations["WalletsController_deleteWallet"];
         options?: never;
         head?: never;
@@ -109,7 +116,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /** List wallets */
         get: operations["WalletsController_getWallet"];
+        /** Update wallet */
         put: operations["WalletsController_updateWallet"];
         post?: never;
         delete?: never;
@@ -122,9 +131,80 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        CreateUserDto: Record<string, never>;
+        UserResponseDto: {
+            /**
+             * @description The id of the User
+             * @example iudjashd-12312-12312-12312
+             */
+            id: string;
+            /**
+             * @description The first name of the User
+             * @example John
+             */
+            name: string;
+            /**
+             * @description The email of the User
+             * @example t@t.com
+             */
+            email: string;
+            /**
+             * @description The last name of the User
+             * @example Doe
+             */
+            lastName: string;
+            /**
+             * Format: date-time
+             * @description When user was created
+             * @example Doe
+             */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description The last update of the User
+             * @example
+             */
+            updatedAt: string;
+            /**
+             * @description The token of the User
+             * @example some-jwt-token
+             */
+            accessToken: string;
+        };
+        CreateUserDto: {
+            /**
+             * @description The email of the User
+             * @example t@t.com
+             */
+            email: string;
+            /**
+             * @description The password of the User
+             * @example myPassw0rd!
+             */
+            password: string;
+            /**
+             * @description The first name of the User
+             * @example John
+             */
+            name: string;
+            /**
+             * @description The last name of the User
+             * @example Doe
+             */
+            lastName: string;
+        };
         LoginUserDto: Record<string, never>;
-        UpdateUserDto: Record<string, never>;
+        UpdateUserDto: {
+            /**
+             * @description The first name of the User
+             * @example John
+             */
+            name?: string;
+            /**
+             * @description The last name of the User
+             * @example Doe
+             */
+            lastName?: string;
+        };
         CreateWalletDto: {
             /**
              * @description The name of the Wallet
@@ -170,7 +250,13 @@ export interface components {
              */
             metadata: Record<string, never>;
         };
-        UpdateWalletDto: Record<string, never>;
+        UpdateWalletDto: {
+            /**
+             * @description The name of the Wallet
+             * @example My Wallet
+             */
+            name?: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -210,7 +296,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
             };
         };
     };
@@ -227,7 +315,17 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The user created */
             201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
+            };
+            /** @description Invalid data */
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -252,7 +350,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
             };
         };
     };
@@ -269,7 +369,29 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
+            };
+        };
+    };
+    UsersController_deleteUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The user created */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
             };
         };
     };
@@ -290,24 +412,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
-            };
-        };
-    };
-    UsersController_deleteUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            204: {
-                headers: {
-                    [name: string]: unknown;
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
                 };
-                content?: never;
             };
         };
     };
@@ -320,7 +427,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description The found record */
+            /** @description The found records */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -351,7 +458,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description The wallet has been successfully created */
+            /** @description The wallet created */
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -378,7 +485,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description Success deleted record */
             204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Wallet not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -397,7 +512,17 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The found record */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletResponseDto"];
+                };
+            };
+            /** @description Wallet not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -420,7 +545,17 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The updated record */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WalletsListResponseDto"];
+                };
+            };
+            /** @description Wallet not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
