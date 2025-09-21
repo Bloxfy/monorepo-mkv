@@ -10,7 +10,6 @@ import { UpdateWalletDto } from './dto/update-wallets.dto';
 export class WalletsController {
     constructor(private readonly walletsService: WalletsService) { }
 
-    @Public()
     @Post()
     @HttpCode(201)
     async createWallet(@Req() req: any, @Body() createWalletDto: CreateWalletDto) {
@@ -21,20 +20,29 @@ export class WalletsController {
         );
     }
 
-    @Get(':id')
-    async getWallet(@Req() req: any) {
+    @Get()
+    async getWallets(@Req() req: any) {
         return plainToInstance(
-            WalletResponseDto, 
-            await this.walletsService.getWallet(req.user.id),
+            WalletResponseDto,
+            await this.walletsService.getWallets(req.user.id),
             { excludeExtraneousValues: true }
         );
     }
 
-    @Put(':id')
-    async updateWallet(@Req() req: any, @Body() updateWalletDto: UpdateWalletDto) {
+    @Get(':walletId')
+    async getWallet(@Req() req: any, @Param('walletId') walletId: string) {
         return plainToInstance(
             WalletResponseDto,
-            await this.walletsService.updateWallet(req.user.id, req.params.id, updateWalletDto),
+            await this.walletsService.getWallet(req.user.id, walletId),
+            { excludeExtraneousValues: true }
+        );
+    }
+
+    @Put(':walletId')
+    async updateWallet(@Req() req: any, @Param('walletId') walletId: string, @Body() updateWalletDto: UpdateWalletDto) {
+        return plainToInstance(
+            WalletResponseDto,
+            await this.walletsService.updateWallet(req.user.id, walletId, updateWalletDto),
             { excludeExtraneousValues: true }
         );
     }

@@ -5,7 +5,7 @@ model Wallet {
   user      User      @relation(fields: [ownerId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  deletedAt DateTime? 
 
   @@map("wallets")
 }

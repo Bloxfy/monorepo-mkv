@@ -37,8 +37,8 @@ describe('WalletsController', () => {
 
   it('should call getWallet with correct user', async () => {
     const req = { user: { id: '1' }, params: { id: '2' } };
-    await controller.getWallet(req);
-    expect(walletsServiceMock.getWallet).toHaveBeenCalledWith(req.user.id);
+    await controller.getWallet(req, req.params.id);
+    expect(walletsServiceMock.getWallet).toHaveBeenCalledWith(req.user.id, req.params.id);
   });
 
   it('should call createWallet with DTO', async () => {

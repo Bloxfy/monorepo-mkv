@@ -17,17 +17,23 @@ export class WalletsService {
         const newWallet = await this.prisma.wallet.create({
             data: {
                 ...wallet,
-                ownerId
+                ownerId,
+                deletedAt: null,
             }
         });
         return newWallet;
     }
 
-    async getWallet(walletId: string) {
-        const wallet = await this.prisma.wallet.findUnique({
-            where: { id: walletId, deletedAt: null }
+    async getWallets(ownerId: string) {
+        return this.prisma.wallet.findMany({
+            where: { ownerId, deletedAt: null }
         });
+    }
 
+    async getWallet(ownerId: string, walletId: string) {
+        const wallet = await this.prisma.wallet.findUnique({
+            where: { id: walletId, ownerId, deletedAt: null }
+        });
         if (!wallet) {
             throw new NotFoundException('Wallet not found');
         }
@@ -61,9 +67,9 @@ export class WalletsService {
     }
 
     private async isOwner(walletId: string, ownerId: string): Promise<Wallet> {
-        const wallet = await this.getWallet(walletId);
+        const wallet = await this.getWallet(walletId, ownerId);
 
-        if (wallet.ownerId !== ownerId) {
+        if (!wallet) {
             throw new ForbiddenException('You are not the owner of this wallet');
         }
 
