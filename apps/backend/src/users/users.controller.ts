@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,14 +16,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../auth/public.decorator';
 import { UserResponseDto } from './dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
-import { LoginUserDto } from './dto/login-user.dto copy';
+import { LoginUserDto } from './dto/login-user.dto';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { ApiErrorResponse } from 'src/common/utils/errors.swagger';
+import { ErrorResponseDto } from 'src/common/dto/error-response.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -67,6 +71,7 @@ export class UsersController {
   @Post('login')
   @ApiOperation({ summary: 'Get auth token' })
   @ApiOkResponse({ type: UserResponseDto })
+  @ApiUnauthorizedResponse({type: ErrorResponseDto})
   async login(@Body() loginDto: LoginUserDto): Promise<UserResponseDto> {
     return plainToInstance(
       UserResponseDto,

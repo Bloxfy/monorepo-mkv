@@ -192,7 +192,26 @@ export interface components {
              */
             lastName: string;
         };
-        LoginUserDto: Record<string, never>;
+        LoginUserDto: {
+            /**
+             * @description The username of the User
+             * @example t@t.com
+             */
+            username: string;
+            /**
+             * @description The password of the User
+             * @example myPassw0rd!
+             */
+            password: string;
+        };
+        ErrorResponseDto: {
+            /** @example 401 */
+            statusCode: number;
+            /** @example Unauthorized */
+            error: string;
+            /** @example Invalid password or username */
+            message: string;
+        };
         UpdateUserDto: {
             /**
              * @description The first name of the User
@@ -352,6 +371,14 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserResponseDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
         };
