@@ -4,6 +4,7 @@ import { CreateWalletDto } from './dto/create-wallets.dto';
 import { Wallet } from '@prisma/client';
 import { UsersService } from '../users/users.service';
 import { UpdateWalletDto } from './dto/update-wallets.dto';
+import { WalletsListResponseDto } from './dto/wallets-response.dto';
 
 @Injectable()
 export class WalletsService {
@@ -24,10 +25,14 @@ export class WalletsService {
         return newWallet;
     }
 
-    async getWallets(ownerId: string) {
-        return this.prisma.wallet.findMany({
+    async getWallets(ownerId: string): Promise<WalletsListResponseDto> {
+        const wallets = this.prisma.wallet.findMany({
             where: { ownerId, deletedAt: null }
         });
+
+        return {
+            items: await wallets,
+        }
     }
 
     async getWallet(ownerId: string, walletId: string) {

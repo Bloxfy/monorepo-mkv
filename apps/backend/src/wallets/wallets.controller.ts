@@ -1,18 +1,30 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Req } from '@nestjs/common';
-import { Public } from '../auth/public.decorator';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Req } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { CreateWalletDto } from './dto/create-wallets.dto';
 import { WalletsService } from './wallets.service';
-import { WalletResponseDto } from './dto/wallets-response.dto';
+import { WalletResponseDto, WalletsListResponseDto } from './dto/wallets-response.dto';
 import { UpdateWalletDto } from './dto/update-wallets.dto';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('wallets')
 @Controller('wallets')
 export class WalletsController {
     constructor(private readonly walletsService: WalletsService) { }
 
     @Post()
-    @HttpCode(201)
-    async createWallet(@Req() req: any, @Body() createWalletDto: CreateWalletDto) {
+    @HttpCode(HttpStatus.CREATED)
+    @ApiOperation({ summary: 'Create a new wallet' })
+    @ApiResponse({
+        status: HttpStatus.CREATED,
+        description: 'The wallet has been successfully created',
+        type: WalletResponseDto,
+    })
+    @ApiResponse({
+        status: HttpStatus.BAD_REQUEST,
+        description: 'Invalid data',
+    })
+    async createWallet(@Req() req: any, @Body() createWalletDto: CreateWalletDto): Promise<WalletResponseDto> {
         return plainToInstance(
             WalletResponseDto,
             await this.walletsService.createWallet(req.user.id, createWalletDto),
@@ -21,9 +33,16 @@ export class WalletsController {
     }
 
     @Get()
-    async getWallets(@Req() req: any) {
+    @ApiOperation({ summary: 'List wallets' })
+    @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Wallet not found' })
+    @ApiResponse({
+        status: HttpStatus.OK,
+        description: 'The found record',
+        type: WalletsListResponseDto,
+    })
+    async getWallets(@Req() req: any): Promise<WalletsListResponseDto> {
         return plainToInstance(
-            WalletResponseDto,
+            WalletsListResponseDto,
             await this.walletsService.getWallets(req.user.id),
             { excludeExtraneousValues: true }
         );
