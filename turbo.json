@@ -39,6 +39,11 @@
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
+    },
+    "type:generate": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
     }
   }
 }

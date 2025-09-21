@@ -12,7 +12,8 @@
     "test": "turbo run test",
     "clean": "node scripts/clean.js",
     "db:generate": "turbo run db:generate",
-    "db:push": "turbo run db:push"
+    "db:push": "turbo run db:push",
+    "type:generate": "turbo run type:generate"
   },
   "keywords": [],
   "author": "",
