@@ -21,6 +21,7 @@ import { UpdateWalletDto } from './dto/update-wallets.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -75,6 +76,12 @@ export class WalletsController {
 
   @Get(':walletId')
   @ApiOperation({ summary: 'List wallets' })
+  @ApiParam({
+    name: 'walletId',
+    type: String,
+    description: 'The ID of the wallet',
+    example: '21sad1d6-1f7a-4e2b-8f3d-9c8e7f6a5b4c',
+  })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Wallet not found',
@@ -97,6 +104,12 @@ export class WalletsController {
 
   @Put(':walletId')
   @ApiOperation({ summary: 'Update wallet' })
+  @ApiParam({
+    name: 'walletId',
+    type: String,
+    description: 'The ID of the wallet',
+    example: '21sad1d6-1f7a-4e2b-8f3d-9c8e7f6a5b4c',
+  })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Wallet not found',
@@ -122,19 +135,28 @@ export class WalletsController {
     );
   }
 
-  @Delete()
+  @Delete(':walletId')
   @HttpCode(204)
   @ApiOperation({ summary: 'Delete wallet' })
+  @ApiParam({
+    name: 'walletId',
+    type: String,
+    description: 'The ID of the wallet',
+    example: '21sad1d6-1f7a-4e2b-8f3d-9c8e7f6a5b4c',
+  })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Wallet not found',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Success deleted record'
+    description: 'Success deleted record',
   })
-  async deleteWallet(@Req() req: any) {
-    await this.walletsService.deleteWallet(req.user.id, req.params.id);
+  async deleteWallet(
+    @Req() req: any,
+    @Param('walletId') walletId: string,
+  ): Promise<void> {
+    await this.walletsService.deleteWallet(req.user.id, walletId);
     return;
   }
 }

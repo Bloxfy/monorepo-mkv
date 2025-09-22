@@ -102,8 +102,7 @@ export interface paths {
         put?: never;
         /** Create a new wallet */
         post: operations["WalletsController_createWallet"];
-        /** Delete wallet */
-        delete: operations["WalletsController_deleteWallet"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -121,7 +120,8 @@ export interface paths {
         /** Update wallet */
         put: operations["WalletsController_updateWallet"];
         post?: never;
-        delete?: never;
+        /** Delete wallet */
+        delete: operations["WalletsController_deleteWallet"];
         options?: never;
         head?: never;
         patch?: never;
@@ -503,36 +503,12 @@ export interface operations {
             };
         };
     };
-    WalletsController_deleteWallet: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Success deleted record */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Wallet not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     WalletsController_getWallet: {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                /** @description The ID of the wallet */
                 walletId: string;
             };
             cookie?: never;
@@ -562,6 +538,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The ID of the wallet */
                 walletId: string;
             };
             cookie?: never;
@@ -580,6 +557,34 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["WalletsListResponseDto"];
                 };
+            };
+            /** @description Wallet not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WalletsController_deleteWallet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The ID of the wallet */
+                walletId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Success deleted record */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Wallet not found */
             404: {
