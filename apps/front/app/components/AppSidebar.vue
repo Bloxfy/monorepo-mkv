@@ -25,7 +25,6 @@ const props = defineProps<SidebarProps & {
     }[]
     navMain: {
       title: string
-      url: string
       items: {
         title: string
         url: string

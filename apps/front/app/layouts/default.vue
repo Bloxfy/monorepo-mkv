@@ -69,11 +69,11 @@ const { data, status } = await useAsyncData(
       return {
         wallets,
         navMain: [{
-          title: 'string',
-          url: 'string',
+          title: 'Overview',
+          url: '',
           items: [{
-            title: 'string',
-            url: 'string',
+            title: 'Wallets',
+            url: FRONT_ROUTES.WALLET.LIST,
             isActive: false,
           }]
         }]
